@@ -5,7 +5,6 @@ class NeuMorphic {
     return Container(
         decoration: BoxDecoration(
             color: Colors.grey[300],
-            borderRadius: const BorderRadius.all(Radius.circular(10.0)),
             boxShadow: [
               BoxShadow(
                   color: (Colors.grey[500])!,

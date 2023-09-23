@@ -1,7 +1,9 @@
+import 'package:flutter_mcu_wiki/app/modules/details/views/details_view.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import '../../../core/values/values.dart';
 import '../../../data/response/status.dart';
+import '../../../routes/app_pages.dart';
 import '../controllers/home_controller.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
@@ -9,6 +11,7 @@ class HomeView extends GetView<HomeController> {
   HomeView({Key? key}) : super(key: key);
 
   var homeController = Get.put(HomeController());
+
 
   @override
   Widget build(BuildContext context) {
@@ -34,8 +37,8 @@ class HomeView extends GetView<HomeController> {
               );
             case Status.SUCCESS:
               return GridView.builder(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 15.0, vertical: 15.0),
+                  padding: const EdgeInsets.only(
+                      left: 15.0, right: 15.0, bottom: 15.0),
                   gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
                     maxCrossAxisExtent: 110,
                     childAspectRatio: 2 / 3,
@@ -54,12 +57,17 @@ class HomeView extends GetView<HomeController> {
                             : Image.asset('assets/mcu.jpg'),
                       ),
                       onTap: () {
-                        /*Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => DetailsScreen(
-                                  mcuMoviesList: mcuMoviesList[index])),
-                        )*/
+                        Get.toNamed(AppPages.DETAILS, arguments: [
+                          {"url": homeController.mcuFilmList.value.data![index].coverUrl},
+                          {"title": homeController.mcuFilmList.value.data![index].title},
+                          {"overview": homeController.mcuFilmList.value.data![index].overview},
+                          {"directedBy": homeController.mcuFilmList.value.data![index].directedBy},
+                          {"realise": homeController.mcuFilmList.value.data![index].releaseDate},
+                          {"duration": homeController.mcuFilmList.value.data![index].duration},
+                          {"boxOffice": homeController.mcuFilmList.value.data![index].boxOffice},
+                          {"phase": homeController.mcuFilmList.value.data![index].phase},
+                          {"chronology": homeController.mcuFilmList.value.data![index].chronology},
+                        ]);
                       },
                     );
                   });
@@ -67,13 +75,11 @@ class HomeView extends GetView<HomeController> {
         }));
   }
 
-  Widget mcuImageList(int index){
+  Widget mcuImageList(int index) {
     return CachedNetworkImage(
-      imageUrl: homeController
-          .mcuFilmList.value.data![index].coverUrl
-          .toString(),
-      placeholder: (context, url) =>
-          Image.asset('assets/mcu.jpg'),
+      imageUrl:
+          homeController.mcuFilmList.value.data![index].coverUrl.toString(),
+      placeholder: (context, url) => Image.asset('assets/mcu.jpg'),
     );
   }
 }
