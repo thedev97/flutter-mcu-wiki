@@ -1,23 +1,30 @@
 import 'package:get/get.dart';
+import '../repository/home_repo.dart';
+import '../../../data/model/mcu_model.dart';
+import '../../../data/response/status.dart';
 
 class HomeController extends GetxController {
-  //TODO: Implement HomeController
+  final _api = HomeRepository();
+  final rxRequestStatus = Status.LOADING.obs;
+  final mcuFilmList = McuModel().obs;
 
-  final count = 0.obs;
+  void setRxRequestStatus(Status _value) => rxRequestStatus.value = _value;
+
+  void setMcuFilmList(McuModel _value) => mcuFilmList.value = _value;
+
   @override
   void onInit() {
     super.onInit();
+    mcuFilmApi();
   }
 
-  @override
-  void onReady() {
-    super.onReady();
+  // Get MCU Film List
+  void mcuFilmApi() {
+    _api.mcuFilmList().then((value) {
+      setRxRequestStatus(Status.SUCCESS);
+      setMcuFilmList(value);
+    }).onError((error, stackTrace) {
+      setRxRequestStatus(Status.FAILED);
+    });
   }
-
-  @override
-  void onClose() {
-    super.onClose();
-  }
-
-  void increment() => count.value++;
 }
